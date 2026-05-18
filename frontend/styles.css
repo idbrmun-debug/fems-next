@@ -1,0 +1,38 @@
+body {
+  background: #f6f7f9;
+  color: #1f2933;
+}
+
+.metric-card {
+  min-height: 104px;
+  border: 1px solid #d7dde5;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 16px;
+}
+
+.metric-label {
+  display: block;
+  margin-bottom: 12px;
+  color: #5f6b7a;
+  font-size: 0.875rem;
+}
+
+.chart-placeholder {
+  min-height: 260px;
+  border: 1px dashed #9aa6b2;
+  border-radius: 8px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #697586;
+}
+
+.alert {
+  border-radius: 8px;
+}
+
+table {
+  background: #ffffff;
+}

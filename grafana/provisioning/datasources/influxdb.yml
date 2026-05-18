@@ -1,0 +1,22 @@
+apiVersion: 1
+
+deleteDatasources:
+  - name: FEMS InfluxDB
+    orgId: 1
+
+datasources:
+  - name: FEMS InfluxDB
+    orgId: 1
+    uid: fems-influxdb
+    type: influxdb
+    access: proxy
+    url: http://influxdb:8086
+    isDefault: true
+    jsonData:
+      version: Flux
+      organization: fems
+      defaultBucket: gems_test
+      tlsSkipVerify: true
+    secureJsonData:
+      token: dev-token-change-me
+    editable: true

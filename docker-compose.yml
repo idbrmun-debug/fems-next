@@ -1,0 +1,67 @@
+services:
+  influxdb:
+    image: influxdb:2.7
+    container_name: fems-next-influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_USERNAME:-admin}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_PASSWORD:-adminpassword}
+      DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB_ORG:-fems}
+      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB_BUCKET:-gems_test}
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB_TOKEN:-dev-token-change-me}
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+      - influxdb-config:/etc/influxdb2
+
+  grafana:
+    image: grafana/grafana-oss:13.0.1
+    container_name: fems-next-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - influxdb
+
+  telegraf:
+    image: telegraf:latest
+    container_name: fems-next-telegraf
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    environment:
+      INFLUXDB_URL: http://influxdb:8086
+      INFLUXDB_TOKEN: ${INFLUXDB_TOKEN:-dev-token-change-me}
+      INFLUXDB_ORG: ${INFLUXDB_ORG:-fems}
+      INFLUXDB_BUCKET: ${INFLUXDB_BUCKET:-gems_test}
+    depends_on:
+      - influxdb
+
+  backend:
+    build:
+      context: ./backend
+    container_name: fems-next-backend
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_ENV: ${FLASK_ENV:-development}
+      INFLUXDB_URL: http://influxdb:8086
+      INFLUXDB_TOKEN: ${INFLUXDB_TOKEN:-dev-token-change-me}
+      INFLUXDB_ORG: ${INFLUXDB_ORG:-fems}
+      INFLUXDB_BUCKET: ${INFLUXDB_BUCKET:-gems_test}
+      TARGET_UNIT_KWH_PER_UNIT: ${TARGET_UNIT_KWH_PER_UNIT:-0}
+    volumes:
+      - ./backend:/app
+      - ./frontend:/frontend:ro
+    depends_on:
+      - influxdb
+
+volumes:
+  influxdb-data:
+  influxdb-config:
+  grafana-data:
