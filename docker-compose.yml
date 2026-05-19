@@ -30,7 +30,7 @@ services:
       - influxdb
 
   telegraf:
-    image: telegraf:latest
+    image: telegraf:1.38.4
     container_name: fems-next-telegraf
     volumes:
       - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro

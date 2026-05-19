@@ -7,7 +7,7 @@ The existing production/reference project at `D:\FEMS` must not be modified unle
 
 ## Stack
 
-- Telegraf
+- Telegraf 1.38.4
 - InfluxDB 2.x
 - Grafana 13.0.1
 - Flask backend API
@@ -231,6 +231,12 @@ Docs:
 - [docs/grafana-dashboard.md](docs/grafana-dashboard.md)
 
 ## Telegraf
+
+Telegraf image is pinned:
+
+```text
+telegraf:1.38.4
+```
 
 The active runtime config is:
 
