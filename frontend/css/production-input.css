@@ -1,0 +1,349 @@
+.production-content {
+  gap: 10px;
+}
+
+.page-title-row {
+  display: flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 2px 14px;
+}
+
+.page-title-row h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.page-title-row span,
+.breadcrumb-text {
+  color: var(--fems-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.production-tabs {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid var(--fems-line);
+  padding: 0 14px;
+}
+
+.tab-button {
+  min-width: 118px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: #475569;
+  padding: 10px 6px;
+  font-weight: 900;
+}
+
+.tab-button.active {
+  border-bottom-color: var(--fems-blue);
+  color: var(--fems-blue);
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+.production-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  padding: 0 14px 14px;
+}
+
+.production-summary-card,
+.status-summary-card {
+  display: flex;
+  min-height: 100px;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid var(--fems-line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 14px;
+}
+
+.production-summary-card i {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 25px;
+}
+
+.production-summary-card h3,
+.status-summary-card h3 {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.production-summary-card strong {
+  font-size: 21px;
+  font-weight: 900;
+}
+
+.production-summary-card small {
+  display: block;
+  color: var(--fems-muted);
+  font-weight: 800;
+}
+
+.status-summary-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.status-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.status-line.done strong {
+  color: #22953a;
+}
+
+.status-line.need strong {
+  color: #ef6b00;
+}
+
+.status-line.idle strong {
+  color: #334155;
+}
+
+.input-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(300px, 0.55fr);
+  gap: 8px;
+}
+
+.date-control-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px 12px;
+}
+
+.date-control-row .form-label {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.date-control-row .form-control {
+  width: 160px;
+}
+
+.production-table input {
+  min-width: 108px;
+  text-align: right;
+  font-weight: 800;
+}
+
+.factory-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 900;
+}
+
+.factory-with-icon i {
+  font-size: 18px;
+}
+
+.attainment-cell {
+  min-width: 120px;
+}
+
+.attainment-bar {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e8edf5;
+}
+
+.attainment-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #2ea44f;
+}
+
+.attainment-bar.warning span {
+  background: #ff9f0a;
+}
+
+.form-action-row,
+.excel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px 14px;
+}
+
+.form-action-row .btn,
+.excel-actions .btn {
+  min-width: 132px;
+  font-weight: 900;
+}
+
+.save-message {
+  color: #22953a;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.attainment-chart-wrap {
+  height: 290px;
+  padding: 0 14px 16px;
+}
+
+.excel-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(360px, 0.9fr);
+  gap: 8px;
+}
+
+.excel-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 0 14px 14px;
+}
+
+.excel-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--fems-muted);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.excel-step span {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid #b8c7da;
+  background: #fff;
+}
+
+.excel-step.active {
+  color: var(--fems-blue);
+}
+
+.excel-step.active span {
+  border-color: var(--fems-blue);
+  background: var(--fems-blue);
+  color: #fff;
+}
+
+.drop-zone {
+  display: grid;
+  min-height: 170px;
+  place-items: center;
+  gap: 8px;
+  margin: 0 14px;
+  border: 1px dashed #b8c7da;
+  border-radius: 8px;
+  background: #fbfdff;
+  padding: 22px;
+  text-align: center;
+}
+
+.drop-zone.drag-over {
+  border-color: var(--fems-blue);
+  background: #edf6ff;
+}
+
+.drop-zone i {
+  color: #238247;
+  font-size: 40px;
+}
+
+.drop-zone strong {
+  font-size: 15px;
+}
+
+.drop-zone span {
+  color: var(--fems-muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.excel-guide-body {
+  display: grid;
+  grid-template-columns: 0.85fr 1fr;
+  gap: 18px;
+  padding: 0 14px 14px;
+}
+
+.excel-guide-body h3 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.excel-guide-body ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #425066;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.history-panel .panel-header .btn {
+  font-weight: 900;
+}
+
+@media (max-width: 1400px) {
+  .production-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .input-grid,
+  .excel-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .page-title-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .production-summary-grid,
+  .excel-steps,
+  .excel-guide-body {
+    grid-template-columns: 1fr;
+  }
+
+  .date-control-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .date-control-row .form-control {
+    width: 100%;
+  }
+}

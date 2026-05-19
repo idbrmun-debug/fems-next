@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
 from .config_store import save_runtime_settings
+from .dashboard import register_dashboard_routes
 from .influx import query_flux, write_points
 from .maintenance import (
     maintenance_record_to_point,
@@ -12,7 +13,13 @@ from .production import (
     parse_production_payload,
     production_record_to_point,
 )
+from .production_dashboard import (
+    register_production_dashboard_routes,
+    save_production_excel,
+    save_production_manual,
+)
 from .settings import get_public_settings, get_settings
+from .settings_screen import register_settings_screen_routes, save_settings_screen
 
 FRONTEND_DIR = "/frontend"
 
@@ -29,6 +36,9 @@ def _float_value(rows: list[dict], default: float = 0.0) -> float:
 def create_app() -> Flask:
     app = Flask(__name__)
     CORS(app)
+    register_dashboard_routes(app)
+    register_production_dashboard_routes(app)
+    register_settings_screen_routes(app)
 
     @app.get("/")
     def frontend_index():
@@ -71,6 +81,11 @@ def create_app() -> Flask:
         save_runtime_settings({"target_unit_kwh_per_unit": target_value})
         return jsonify({"status": "saved", **get_public_settings()})
 
+    @app.post("/api/settings-screen/save")
+    def settings_screen_save():
+        payload = request.get_json(silent=True) or {}
+        return jsonify(save_settings_screen(payload)), 201
+
     @app.post("/api/production-input")
     def production_input():
         payload = request.get_json(silent=True) or {}
@@ -87,6 +102,17 @@ def create_app() -> Flask:
                 "written": 1,
             }
         ), 201
+
+    @app.post("/api/production-page/manual")
+    def production_page_manual_save():
+        payload = request.get_json(silent=True) or {}
+        return jsonify(save_production_manual(payload)), 201
+
+    @app.post("/api/production-page/excel-upload")
+    def production_page_excel_upload():
+        file = request.files.get("file")
+        filename = file.filename if file else None
+        return jsonify(save_production_excel(filename)), 201
 
     @app.post("/api/production-upload")
     def production_upload():

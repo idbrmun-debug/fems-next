@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FEMS Settings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="./dashboard-main.css" rel="stylesheet">
+    <link href="./css/settings.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="dashboard-shell">
+      <aside class="sidebar" aria-label="FEMS navigation">
+        <div class="sidebar-brand">
+          <i class="bi bi-lightning-charge-fill"></i>
+        </div>
+        <nav class="sidebar-nav">
+          <a class="sidebar-link" href="./dashboard-main.html" data-section="main">
+            <i class="bi bi-house-door-fill"></i>
+            <span>메인</span>
+          </a>
+          <a class="sidebar-link" href="#equipment" data-section="equipment">
+            <i class="bi bi-building-gear"></i>
+            <span>설비 현황</span>
+          </a>
+          <a class="sidebar-link" href="#factory" data-section="factory">
+            <i class="bi bi-grid-3x3-gap-fill"></i>
+            <span>공장별</span>
+          </a>
+          <a class="sidebar-link" href="#alarm" data-section="alarm">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <span>알람 현황</span>
+          </a>
+          <a class="sidebar-link" href="#report" data-section="report">
+            <i class="bi bi-bar-chart-line-fill"></i>
+            <span>리포트</span>
+          </a>
+          <a class="sidebar-link" href="./production-input.html" data-section="production">
+            <i class="bi bi-pencil-square"></i>
+            <span>생산량 입력</span>
+          </a>
+          <a class="sidebar-link" href="#maintenance" data-section="maintenance">
+            <i class="bi bi-clipboard2-pulse-fill"></i>
+            <span>유지보수 이력</span>
+          </a>
+          <a class="sidebar-link active" href="./settings.html" data-section="settings">
+            <i class="bi bi-gear-fill"></i>
+            <span>설정</span>
+          </a>
+        </nav>
+      </aside>
+
+      <div class="main-area">
+        <header class="topbar">
+          <div>
+            <h1><i class="bi bi-lightning-charge-fill"></i> FEMS 전력 모니터링 시스템</h1>
+            <span class="system-subtitle">Factory Energy Management System</span>
+          </div>
+          <div class="topbar-tools">
+            <span class="date-time"><i class="bi bi-calendar3"></i><span id="currentTime">-</span></span>
+            <span class="refresh-state"><i class="bi bi-arrow-repeat"></i> 자동 갱신</span>
+            <select id="refreshInterval" class="form-select form-select-sm" aria-label="새로고침 주기">
+              <option value="5">5s</option>
+              <option value="10">10s</option>
+              <option value="30">30s</option>
+              <option value="60">60s</option>
+            </select>
+            <button class="icon-button" type="button" aria-label="전체 화면">
+              <i class="bi bi-fullscreen"></i>
+            </button>
+          </div>
+        </header>
+
+        <main class="content settings-content">
+          <section class="settings-title-row">
+            <h2>설정</h2>
+            <nav class="breadcrumb-text" aria-label="breadcrumb">설정 &gt; 공장/설비 관리</nav>
+          </section>
+
+          <section class="settings-tabs" aria-label="설정 탭">
+            <button class="settings-tab active" type="button" data-tab="equipment">공장/설비 관리</button>
+            <button class="settings-tab" type="button" data-tab="meter">계측기 관리</button>
+            <button class="settings-tab" type="button" data-tab="alarm">알람 설정</button>
+            <button class="settings-tab" type="button" data-tab="target">목표 관리</button>
+            <button class="settings-tab" type="button" data-tab="system">시스템 설정</button>
+          </section>
+
+          <section class="settings-layout">
+            <aside class="panel equipment-tree-panel">
+              <div class="panel-header">
+                <h2>설비 구조</h2>
+              </div>
+              <div class="tree-search">
+                <input class="form-control form-control-sm" type="search" placeholder="검색 (공장, 공정, 설비명)">
+                <i class="bi bi-search"></i>
+              </div>
+              <div id="equipmentTree" class="equipment-tree"></div>
+              <button class="btn btn-primary w-100 add-equipment" type="button">
+                <i class="bi bi-plus-lg"></i> 설비 추가
+              </button>
+            </aside>
+
+            <section class="settings-main">
+              <article class="panel equipment-info-panel">
+                <div class="panel-header">
+                  <h2>설비 기본 정보</h2>
+                  <div class="header-actions">
+                    <button class="btn btn-outline-secondary btn-sm" type="button">취소</button>
+                    <button class="btn btn-primary btn-sm save-settings" type="button">저장</button>
+                  </div>
+                </div>
+                <form class="equipment-form" id="equipmentForm">
+                  <div class="meter-avatar">
+                    <div><i class="bi bi-speedometer2"></i></div>
+                    <button class="btn btn-outline-primary btn-sm" type="button">이미지 변경</button>
+                  </div>
+                  <div class="form-grid">
+                    <label>계측기 ID <span>*</span><input id="meterId" class="form-control" type="text"></label>
+                    <label>계측기명 <span>*</span><input id="meterName" class="form-control" type="text"></label>
+                    <label>설치 공장 <span>*</span><select id="factory" class="form-select"><option>3 공장</option><option>4 공장</option><option>5 공장</option></select></label>
+                    <label>공정<select id="process" class="form-select"><option>압출 공정</option><option>열처리 공정</option><option>성형 공정</option></select></label>
+                    <label>라인/피더<select id="line" class="form-select"><option>압출 라인 1</option><option>압출 라인 2</option></select></label>
+                    <label>설비명<input id="equipmentName" class="form-control" type="text"></label>
+                    <label>계측기 타입<select id="meterType" class="form-select"><option>RTU</option><option>PLC</option><option>Gateway</option></select></label>
+                    <label>통신 방식<select id="communication" class="form-select"><option>Modbus TCP</option><option>Modbus RTU</option></select></label>
+                    <label>IP 주소 <span>*</span><input id="ip" class="form-control" type="text"></label>
+                    <label>포트<input id="port" class="form-control" type="number"></label>
+                    <label>설치 위치<input id="location" class="form-control" type="text"></label>
+                    <label>설치일<input id="installedAt" class="form-control" type="date"></label>
+                    <label class="memo-field">메모<textarea id="memo" class="form-control" rows="2"></textarea></label>
+                  </div>
+                </form>
+              </article>
+
+              <div class="settings-mid-grid">
+                <article class="panel alarm-rule-panel">
+                  <div class="panel-header">
+                    <h2>알람 설정</h2>
+                  </div>
+                  <div class="table-responsive">
+                    <table class="table dashboard-table align-middle">
+                      <thead>
+                        <tr>
+                          <th>항목</th>
+                          <th>하한값</th>
+                          <th>상한값</th>
+                          <th>단위</th>
+                          <th>지속시간</th>
+                          <th>알람 레벨</th>
+                          <th>사용 여부</th>
+                        </tr>
+                      </thead>
+                      <tbody id="alarmRuleRows"></tbody>
+                    </table>
+                  </div>
+                  <button class="btn btn-outline-primary btn-sm add-alarm" type="button">
+                    <i class="bi bi-plus-lg"></i> 알람 항목 추가
+                  </button>
+                </article>
+
+                <article class="panel target-panel">
+                  <div class="panel-header">
+                    <h2>목표 원단위 (kWh/ton) <i class="bi bi-info-circle"></i></h2>
+                    <div class="header-actions">
+                      <button class="btn btn-outline-secondary btn-sm" type="button">취소</button>
+                      <button class="btn btn-primary btn-sm save-settings" type="button">저장</button>
+                    </div>
+                  </div>
+                  <div class="target-form">
+                    <label>적용 공정<select id="targetProcess" class="form-select"><option>압출 공정</option></select></label>
+                    <label>목표 원단위<input id="targetSpecificEnergy" class="form-control" type="number" step="0.01"></label>
+                    <label>적용 기간<div class="date-range"><input id="targetPeriod" class="form-control" type="text"><i class="bi bi-calendar3"></i></div></label>
+                  </div>
+                  <h3>히스토리</h3>
+                  <div class="table-responsive">
+                    <table class="table dashboard-table align-middle">
+                      <thead>
+                        <tr>
+                          <th>시작일</th>
+                          <th>종료일</th>
+                          <th>목표 원단위</th>
+                          <th>등록자</th>
+                          <th>등록일시</th>
+                        </tr>
+                      </thead>
+                      <tbody id="targetHistoryRows"></tbody>
+                    </table>
+                  </div>
+                </article>
+              </div>
+
+              <article class="panel connected-meter-panel">
+                <div class="panel-header">
+                  <h2>연결 계측기 (피더/하위 계측기)</h2>
+                  <button class="btn btn-outline-primary btn-sm" type="button">
+                    <i class="bi bi-plus-lg"></i> 연결 계측기 추가
+                  </button>
+                </div>
+                <div class="table-responsive">
+                  <table class="table dashboard-table align-middle">
+                    <thead>
+                      <tr>
+                        <th>계측기 ID</th>
+                        <th>계측기명</th>
+                        <th>타입</th>
+                        <th>연결 방식</th>
+                        <th>IP 주소</th>
+                        <th>포트</th>
+                        <th>역할</th>
+                        <th>상태</th>
+                        <th>관리</th>
+                      </tr>
+                    </thead>
+                    <tbody id="connectedMeterRows"></tbody>
+                  </table>
+                </div>
+              </article>
+            </section>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div id="saveToast" class="toast-message" role="status">저장되었습니다.</div>
+    <script src="./js/settings.js"></script>
+  </body>
+</html>

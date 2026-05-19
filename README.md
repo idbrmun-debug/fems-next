@@ -23,6 +23,8 @@ Use `127.0.0.1` on Windows when `localhost` behaves inconsistently.
 | InfluxDB | `http://127.0.0.1:8086` |
 | Backend API | `http://127.0.0.1:5000/api/health` |
 | Frontend | `http://127.0.0.1:5000/` |
+| Main dashboard prototype | `http://127.0.0.1:5000/dashboard-main.html` |
+| Production input prototype | `http://127.0.0.1:5000/production-input.html` |
 
 Grafana login:
 
@@ -52,6 +54,18 @@ Open Grafana:
 
 ```text
 http://127.0.0.1:3000/d/fems-overview/fems-overview
+```
+
+Open the FEMS main dashboard prototype:
+
+```text
+http://127.0.0.1:5000/dashboard-main.html
+```
+
+Open the production input prototype:
+
+```text
+http://127.0.0.1:5000/production-input.html
 ```
 
 ## Environment
@@ -195,10 +209,53 @@ GET /api/maintenance-log
 POST /api/maintenance-log
 ```
 
+Dashboard prototype data:
+
+```http
+GET /api/dashboard/summary
+GET /api/dashboard/factories
+GET /api/dashboard/power-trend
+GET /api/dashboard/specific-energy-trend
+GET /api/dashboard/production-status
+GET /api/dashboard/alarms
+```
+
+Quick dashboard API check:
+
+```powershell
+curl.exe -sS http://127.0.0.1:5000/api/dashboard/summary
+curl.exe -sS http://127.0.0.1:5000/api/dashboard/factories
+curl.exe -sS http://127.0.0.1:5000/api/dashboard/power-trend
+curl.exe -sS http://127.0.0.1:5000/api/dashboard/specific-energy-trend
+curl.exe -sS http://127.0.0.1:5000/api/dashboard/production-status
+curl.exe -sS http://127.0.0.1:5000/api/dashboard/alarms
+```
+
+Production input prototype data:
+
+```http
+GET /api/production-page/summary
+GET /api/production-page/manual
+POST /api/production-page/manual
+GET /api/production-page/excel
+POST /api/production-page/excel-upload
+GET /api/production-page/history
+```
+
+Quick production input API check:
+
+```powershell
+curl.exe -sS http://127.0.0.1:5000/api/production-page/summary
+curl.exe -sS http://127.0.0.1:5000/api/production-page/manual
+curl.exe -sS http://127.0.0.1:5000/api/production-page/excel
+curl.exe -sS http://127.0.0.1:5000/api/production-page/history
+```
+
 API details:
 
 - [docs/backend-api.md](docs/backend-api.md)
 - [docs/electric-intensity.md](docs/electric-intensity.md)
+- [docs/production-input-spec.md](docs/production-input-spec.md)
 
 ## Grafana
 
