@@ -5,6 +5,7 @@ from .alarm_screen import acknowledge_alarm, register_alarm_screen_routes
 from .config_store import save_runtime_settings
 from .dashboard import register_dashboard_routes
 from .equipment_screen import register_equipment_screen_routes
+from .factory_screen import register_factory_screen_routes
 from .influx import query_flux, write_points
 from .maintenance import (
     maintenance_record_to_point,
@@ -42,6 +43,7 @@ def create_app() -> Flask:
     CORS(app)
     register_dashboard_routes(app)
     register_equipment_screen_routes(app)
+    register_factory_screen_routes(app)
     register_production_dashboard_routes(app)
     register_settings_screen_routes(app)
     register_maintenance_screen_routes(app)
