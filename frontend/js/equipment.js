@@ -6,6 +6,7 @@ const state = {
   rows: [],
   filteredRows: [],
   selectedEquipmentId: null,
+  queryFilters: {},
   charts: [],
 };
 
@@ -78,6 +79,37 @@ function renderFilters() {
   fillSelect("processFilter", filters.processes);
   fillSelect("statusFilter", filters.statuses);
   fillSelect("typeFilter", filters.types);
+}
+
+function readQueryFilters() {
+  const params = new URLSearchParams(window.location.search);
+  state.queryFilters = {
+    factory: params.get("factory") || "",
+    process: params.get("process") || "",
+    furnace: params.get("furnace") || "",
+    meter: params.get("meter") || "",
+  };
+  return state.queryFilters;
+}
+
+function setSelectValueIfExists(id, value) {
+  if (!value) return;
+  const select = document.getElementById(id);
+  const option = [...select.options].find((item) => item.value === value);
+  if (option) select.value = value;
+}
+
+function applyInitialQueryFilters() {
+  const filters = readQueryFilters();
+  setSelectValueIfExists("factoryFilter", filters.factory);
+  setSelectValueIfExists("processFilter", filters.process);
+  if (filters.meter) {
+    document.getElementById("keywordFilter").value = filters.meter;
+    state.selectedEquipmentId = filters.meter;
+  } else if (filters.furnace) {
+    document.getElementById("keywordFilter").value = filters.furnace;
+  }
+  applyFilters({ silent: true });
 }
 
 function renderEquipmentCards() {
@@ -209,20 +241,24 @@ async function updateEquipmentDetail(equipmentId) {
   renderEquipmentCards();
 }
 
-function applyFilters() {
+function applyFilters(options = {}) {
   const factory = document.getElementById("factoryFilter").value;
   const process = document.getElementById("processFilter").value;
   const status = document.getElementById("statusFilter").value;
   const type = document.getElementById("typeFilter").value;
   const keyword = document.getElementById("keywordFilter").value.trim().toLowerCase();
+  const factoryAll = document.getElementById("factoryFilter").options[0]?.value;
+  const processAll = document.getElementById("processFilter").options[0]?.value;
+  const statusAll = document.getElementById("statusFilter").options[0]?.value;
+  const typeAll = document.getElementById("typeFilter").options[0]?.value;
 
   state.filteredRows = state.rows.filter((item) => {
     const keywordSource = `${item.name} ${item.id} ${item.feeder} ${item.line}`.toLowerCase();
     return (
-      (factory === "전체" || item.factory === factory) &&
-      (process === "전체" || item.process === process) &&
-      (status === "전체" || item.status === status) &&
-      (type === "전체" || item.type === type) &&
+      (factory === factoryAll || item.factory === factory) &&
+      (process === processAll || item.process === process) &&
+      (status === statusAll || item.status === status) &&
+      (type === typeAll || item.type === type) &&
       (!keyword || keywordSource.includes(keyword))
     );
   });
@@ -230,7 +266,7 @@ function applyFilters() {
   document.getElementById("filterStatus").textContent = `${state.filteredRows.length}대 조회`;
   renderEquipmentCards();
   renderEquipmentTable();
-  showToast("조회 조건이 적용되었습니다.");
+  if (!options.silent) showToast("조회 조건이 적용되었습니다.");
 }
 
 function destroyCharts() {
@@ -333,11 +369,12 @@ async function init() {
   await Promise.all([fetchEquipmentSummary(), fetchEquipmentList()]);
   renderSummaryCards();
   renderFilters();
-  renderEquipmentCards();
-  renderEquipmentTable();
+  applyInitialQueryFilters();
   renderEquipmentCharts();
   bindEvents();
-  await updateEquipmentDetail(state.rows[0].id);
+  const selectedFromQuery = state.rows.find((item) => item.id === state.selectedEquipmentId);
+  const selectedFromFilter = state.filteredRows[0];
+  await updateEquipmentDetail((selectedFromQuery || selectedFromFilter || state.rows[0]).id);
 }
 
 init().catch((error) => {

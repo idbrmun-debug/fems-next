@@ -51,6 +51,23 @@
 http://127.0.0.1:3000/d/equipment-detail/equipment-detail?var-meter=RTU-301&var-factory=3공장&var-feeder=메인 피더
 ```
 
+## 화면 간 query string 연동
+
+`factory.html`의 피더/라인 상세 테이블에서 `상세` 링크를 클릭하면 `equipment.html`로 이동하면서 조건을 query string으로 전달한다.
+
+예시:
+
+```text
+equipment.html?factory=3공장&process=압출 공정&furnace=압출 메인계측기&meter=RTU-301
+```
+
+`equipment.html`은 초기 로딩 시 query string을 읽어 다음 동작을 수행한다.
+
+- `factory` 값이 있으면 공장 필터를 자동 선택한다.
+- `process` 값이 있으면 공정 필터를 자동 선택한다.
+- `meter` 값이 있으면 검색어에 RTU ID를 넣고 해당 설비 상세를 자동 표시한다.
+- `meter`가 없고 `furnace` 값이 있으면 설비명 기준 검색어로 사용한다.
+
 Grafana 패널 후보:
 
 - 설비별 전력 추이
