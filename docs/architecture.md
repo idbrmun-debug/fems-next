@@ -12,7 +12,8 @@ flowchart LR
     Telegraf["Telegraf templates"] --> InfluxDB["InfluxDB 2.x"]
     Backend["Flask backend API"] --> InfluxDB
     Grafana["Grafana dashboards"] --> InfluxDB
-    Frontend["Bootstrap frontend scaffold"] --> Backend
+    Backend --> Frontend["Bootstrap frontend scaffold served on port 5000"]
+    Frontend --> Backend
 ```
 
 ## Data Flow

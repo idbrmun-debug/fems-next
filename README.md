@@ -21,8 +21,8 @@ Use `127.0.0.1` on Windows when `localhost` behaves inconsistently.
 | --- | --- |
 | Grafana | `http://127.0.0.1:3000` |
 | InfluxDB | `http://127.0.0.1:8086` |
-| Backend API | `http://127.0.0.1:5000` |
-| Frontend | Open `frontend/index.html` in a browser |
+| Backend API | `http://127.0.0.1:5000/api/health` |
+| Frontend | `http://127.0.0.1:5000/` |
 
 Grafana login:
 
@@ -155,6 +155,13 @@ What these cover:
 | `verify-ui-api.ps1` | Settings, electric intensity, maintenance APIs |
 
 ## Backend APIs
+
+The Flask backend also serves the Bootstrap frontend from the same port.
+Open this URL after `docker compose up -d`:
+
+```powershell
+http://127.0.0.1:5000/
+```
 
 Production direct input:
 
