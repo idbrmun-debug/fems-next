@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
+from .alarm_screen import acknowledge_alarm, register_alarm_screen_routes
 from .config_store import save_runtime_settings
 from .dashboard import register_dashboard_routes
 from .influx import query_flux, write_points
@@ -8,6 +9,7 @@ from .maintenance import (
     maintenance_record_to_point,
     parse_maintenance_payload,
 )
+from .maintenance_screen import register_maintenance_screen_routes, save_maintenance_screen
 from .production import (
     parse_production_excel,
     parse_production_payload,
@@ -39,6 +41,8 @@ def create_app() -> Flask:
     register_dashboard_routes(app)
     register_production_dashboard_routes(app)
     register_settings_screen_routes(app)
+    register_maintenance_screen_routes(app)
+    register_alarm_screen_routes(app)
 
     @app.get("/")
     def frontend_index():
@@ -85,6 +89,11 @@ def create_app() -> Flask:
     def settings_screen_save():
         payload = request.get_json(silent=True) or {}
         return jsonify(save_settings_screen(payload)), 201
+
+    @app.post("/api/alarm-page/acknowledge")
+    def alarm_acknowledge():
+        payload = request.get_json(silent=True) or {}
+        return jsonify(acknowledge_alarm(payload)), 201
 
     @app.post("/api/production-input")
     def production_input():
@@ -222,6 +231,11 @@ from(bucket: "{bucket}")
         ]
 
         return jsonify({"status": "ok", "items": items})
+
+    @app.post("/api/maintenance-page/save")
+    def maintenance_screen_save():
+        payload = request.get_json(silent=True) or {}
+        return jsonify(save_maintenance_screen(payload)), 201
 
     return app
 
