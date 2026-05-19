@@ -20,6 +20,7 @@ from .production_dashboard import (
     save_production_excel,
     save_production_manual,
 )
+from .report_screen import register_report_screen_routes
 from .settings import get_public_settings, get_settings
 from .settings_screen import register_settings_screen_routes, save_settings_screen
 
@@ -43,6 +44,7 @@ def create_app() -> Flask:
     register_settings_screen_routes(app)
     register_maintenance_screen_routes(app)
     register_alarm_screen_routes(app)
+    register_report_screen_routes(app)
 
     @app.get("/")
     def frontend_index():
