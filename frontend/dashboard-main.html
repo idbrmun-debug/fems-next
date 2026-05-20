@@ -89,7 +89,7 @@
             <div class="panel summary-panel">
               <div class="panel-header">
                 <h2>전체 요약</h2>
-                <a href="#summary">상세 보기 <i class="bi bi-chevron-right"></i></a>
+                <a href="./factory.html">상세 보기 <i class="bi bi-chevron-right"></i></a>
               </div>
               <div id="summaryCards" class="summary-grid"></div>
             </div>
@@ -102,7 +102,7 @@
                   <h2>전력량 추이</h2>
                   <span>단위: kWh</span>
                 </div>
-                <div class="btn-group btn-group-sm period-tabs" role="group" aria-label="전력량 기간 선택">
+                <div class="btn-group btn-group-sm period-tabs" data-chart="power" role="group" aria-label="전력량 기간 선택">
                   <button type="button" class="btn btn-outline-primary" data-period="hour">1시간</button>
                   <button type="button" class="btn btn-primary" data-period="day">일간</button>
                   <button type="button" class="btn btn-outline-primary" data-period="month">월간</button>
@@ -117,7 +117,7 @@
                   <h2>원단위 추이 (전력량 / 생산량)</h2>
                   <span>단위: kWh/ton</span>
                 </div>
-                <div class="btn-group btn-group-sm period-tabs" role="group" aria-label="원단위 기간 선택">
+                <div class="btn-group btn-group-sm period-tabs" data-chart="specific" role="group" aria-label="원단위 기간 선택">
                   <button type="button" class="btn btn-outline-primary" data-period="hour">1시간</button>
                   <button type="button" class="btn btn-primary" data-period="day">일간</button>
                   <button type="button" class="btn btn-outline-primary" data-period="month">월간</button>

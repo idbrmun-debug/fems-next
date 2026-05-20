@@ -2,6 +2,7 @@ services:
   influxdb:
     image: influxdb:2.7
     container_name: fems-next-influxdb
+    restart: unless-stopped
     ports:
       - "8086:8086"
     environment:
@@ -18,6 +19,7 @@ services:
   grafana:
     image: grafana/grafana-oss:13.0.1
     container_name: fems-next-grafana
+    restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
@@ -32,6 +34,7 @@ services:
   telegraf:
     image: telegraf:1.38.4
     container_name: fems-next-telegraf
+    restart: unless-stopped
     volumes:
       - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
     environment:
@@ -46,6 +49,7 @@ services:
     build:
       context: ./backend
     container_name: fems-next-backend
+    restart: unless-stopped
     ports:
       - "5000:5000"
     environment:

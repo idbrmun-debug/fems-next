@@ -1,7 +1,7 @@
 const FEMS_NAV_ITEMS = [
   { section: "main", label: "메인", href: "./dashboard-main.html", icon: "bi-house-door-fill", match: ["dashboard-main.html", "index.html", ""] },
-  { section: "equipment", label: "설비 현황", href: "./equipment.html", icon: "bi-building-gear", match: ["equipment.html"] },
   { section: "factory", label: "공장별", href: "./factory.html", icon: "bi-grid-3x3-gap-fill", match: ["factory.html"] },
+  { section: "equipment", label: "설비 현황", href: "./equipment.html", icon: "bi-building-gear", match: ["equipment.html"] },
   { section: "alarm", label: "알람 현황", href: "./alarm.html", icon: "bi-exclamation-triangle-fill", match: ["alarm.html"] },
   { section: "report", label: "리포트", href: "./report.html", icon: "bi-bar-chart-line-fill", match: ["report.html"] },
   { section: "production", label: "생산량 입력", href: "./production-input.html", icon: "bi-pencil-square", match: ["production-input.html"] },

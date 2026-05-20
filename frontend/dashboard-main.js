@@ -8,6 +8,14 @@ const state = {
   productionStatus: { items: [], indicators: [] },
   alarms: { summary: { total: 0, items: [] }, recent: [] },
   charts: [],
+  trendSamples: {
+    power: {},
+    specific: {},
+  },
+  activePeriods: {
+    power: "day",
+    specific: "day",
+  },
 };
 
 const formatNumber = (value, digits = 0) =>
@@ -44,6 +52,57 @@ async function loadDashboardData() {
   state.specificEnergyTrend = specificEnergyTrend;
   state.productionStatus = productionStatus;
   state.alarms = alarms;
+  buildTrendSamples();
+}
+
+function buildTrendSamples() {
+  const factoryColors = {
+    "3공장": "#1a73e8",
+    "4공장": "#36a339",
+    "5공장": "#8e44d7",
+  };
+
+  state.trendSamples.power = {
+    hour: {
+      labels: ["09:00", "09:10", "09:20", "09:30", "09:40", "09:50", "10:00"],
+      series: [
+        { label: "3공장", color: factoryColors["3공장"], data: [1180, 1240, 1310, 1270, 1390, 1450, 1420] },
+        { label: "4공장", color: factoryColors["4공장"], data: [1320, 1360, 1420, 1510, 1490, 1560, 1610] },
+        { label: "5공장", color: factoryColors["5공장"], data: [980, 1040, 1110, 1160, 1210, 1190, 1260] },
+      ],
+    },
+    day: state.powerTrend,
+    month: {
+      labels: ["1월", "2월", "3월", "4월", "5월", "6월"],
+      series: [
+        { label: "3공장", color: factoryColors["3공장"], data: [220000, 231500, 238200, 242800, 245123, 249600] },
+        { label: "4공장", color: factoryColors["4공장"], data: [242300, 251400, 259700, 264200, 268654, 271300] },
+        { label: "5공장", color: factoryColors["5공장"], data: [198500, 204100, 209800, 212400, 215897, 219200] },
+      ],
+    },
+  };
+
+  state.trendSamples.specific = {
+    hour: {
+      labels: ["09:00", "09:10", "09:20", "09:30", "09:40", "09:50", "10:00"],
+      series: [
+        { label: "3공장", color: factoryColors["3공장"], data: [19.2, 19.4, 19.8, 19.5, 19.7, 19.6, 19.8] },
+        { label: "4공장", color: factoryColors["4공장"], data: [18.4, 18.6, 18.7, 18.9, 18.8, 18.7, 18.9] },
+        { label: "5공장", color: factoryColors["5공장"], data: [20.2, 20.5, 20.8, 20.6, 20.9, 21.0, 20.7] },
+      ],
+      target: { label: "목표 원단위", color: "#ef3340", data: [20.8, 20.8, 20.8, 20.8, 20.8, 20.8, 20.8] },
+    },
+    day: state.specificEnergyTrend,
+    month: {
+      labels: ["1월", "2월", "3월", "4월", "5월", "6월"],
+      series: [
+        { label: "3공장", color: factoryColors["3공장"], data: [20.3, 20.0, 19.9, 19.7, 19.58, 19.45] },
+        { label: "4공장", color: factoryColors["4공장"], data: [19.6, 19.2, 19.0, 18.9, 18.82, 18.75] },
+        { label: "5공장", color: factoryColors["5공장"], data: [21.6, 21.3, 21.0, 20.9, 20.73, 20.65] },
+      ],
+      target: { label: "목표 원단위", color: "#ef3340", data: [20.8, 20.8, 20.8, 20.8, 20.8, 20.8] },
+    },
+  };
 }
 
 function renderFactoryCards() {
@@ -241,23 +300,26 @@ function renderCharts() {
     return;
   }
 
+  const selectedPowerTrend = state.trendSamples.power[state.activePeriods.power] || state.powerTrend;
+  const selectedSpecificTrend = state.trendSamples.specific[state.activePeriods.specific] || state.specificEnergyTrend;
+
   createLineChart(
     "powerTrendChart",
-    state.powerTrend.labels || [],
-    (state.powerTrend.series || []).map((item) => chartDataset(item.label, item.color, item.data)),
-    16000
+    selectedPowerTrend.labels || [],
+    (selectedPowerTrend.series || []).map((item) => chartDataset(item.label, item.color, item.data)),
+    state.activePeriods.power === "month" ? 300000 : 16000
   );
 
-  const specificEnergyDatasets = (state.specificEnergyTrend.series || []).map((item) =>
+  const specificEnergyDatasets = (selectedSpecificTrend.series || []).map((item) =>
     chartDataset(item.label, item.color, item.data)
   );
 
-  if (state.specificEnergyTrend.target) {
+  if (selectedSpecificTrend.target) {
     specificEnergyDatasets.push({
-      label: state.specificEnergyTrend.target.label,
-      data: state.specificEnergyTrend.target.data,
-      borderColor: state.specificEnergyTrend.target.color,
-      backgroundColor: state.specificEnergyTrend.target.color,
+      label: selectedSpecificTrend.target.label,
+      data: selectedSpecificTrend.target.data,
+      borderColor: selectedSpecificTrend.target.color,
+      backgroundColor: selectedSpecificTrend.target.color,
       borderDash: [6, 5],
       borderWidth: 2,
       pointRadius: 0,
@@ -265,7 +327,7 @@ function renderCharts() {
     });
   }
 
-  createLineChart("intensityTrendChart", state.specificEnergyTrend.labels || [], specificEnergyDatasets, 42);
+  createLineChart("intensityTrendChart", selectedSpecificTrend.labels || [], specificEnergyDatasets, 42);
 
   const peakPower = state.powerTrend.peak_power || { labels: [], series: [] };
   const peakChart = new Chart(document.getElementById("peakPowerChart"), {
@@ -377,6 +439,12 @@ function bindPeriodButtons() {
         item.classList.toggle("btn-primary", item === button);
         item.classList.toggle("btn-outline-primary", item !== button);
       });
+
+      const chartType = group.dataset.chart;
+      if (chartType && state.activePeriods[chartType]) {
+        state.activePeriods[chartType] = button.dataset.period || "day";
+        renderCharts();
+      }
     });
   });
 }

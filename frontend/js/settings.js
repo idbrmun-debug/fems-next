@@ -180,6 +180,73 @@ function showToast() {
   setTimeout(() => toast.classList.remove("show"), 2200);
 }
 
+function openSettingsModal(id) {
+  const modal = document.getElementById(id);
+  if (!modal) return;
+  modal.classList.add("show");
+  modal.setAttribute("aria-hidden", "false");
+}
+
+function closeSettingsModal(id) {
+  const modal = document.getElementById(id);
+  if (!modal) return;
+  modal.classList.remove("show");
+  modal.setAttribute("aria-hidden", "true");
+}
+
+function bindSampleModals() {
+  document.getElementById("openEquipmentAddModal")?.addEventListener("click", () => {
+    openSettingsModal("equipmentAddModal");
+  });
+
+  document.getElementById("openConnectedMeterModal")?.addEventListener("click", () => {
+    openSettingsModal("connectedMeterModal");
+  });
+
+  document.querySelectorAll("[data-close-modal]").forEach((button) => {
+    button.addEventListener("click", () => closeSettingsModal(button.dataset.closeModal));
+  });
+
+  document.querySelectorAll(".settings-modal").forEach((modal) => {
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        closeSettingsModal(modal.id);
+      }
+    });
+  });
+
+  document.getElementById("equipmentAddForm")?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const label = document.getElementById("newEquipmentName").value || "신규 설비";
+    const tree = document.getElementById("equipmentTree");
+    const sample = document.createElement("div");
+    sample.className = "tree-node active";
+    sample.innerHTML = `<i class="bi bi-chevron-right chevron"></i><i class="bi bi-cpu-fill" style="color:#1a73e8"></i><span>${label}</span>`;
+    tree?.querySelectorAll(".tree-node").forEach((node) => node.classList.remove("active"));
+    tree?.prepend(sample);
+    closeSettingsModal("equipmentAddModal");
+    showToast();
+  });
+
+  document.getElementById("connectedMeterForm")?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const meter = {
+      meter_id: document.getElementById("newMeterId").value,
+      meter_name: document.getElementById("newMeterName").value,
+      type: document.getElementById("newMeterType").value,
+      connection: document.getElementById("newMeterConnection").value,
+      ip: document.getElementById("newMeterIp").value,
+      port: document.getElementById("newMeterPort").value,
+      role: document.getElementById("newMeterRole").value,
+      status: document.getElementById("newMeterStatus").value,
+    };
+    state.detail.connected_meters.push(meter);
+    renderConnectedMeters();
+    closeSettingsModal("connectedMeterModal");
+    showToast();
+  });
+}
+
 function updateClock() {
   const now = new Date();
   document.getElementById("currentTime").textContent = now.toLocaleString("sv-SE", {
@@ -198,6 +265,7 @@ async function init() {
   setInterval(updateClock, 1000);
   bindTabs();
   bindSaveButtons();
+  bindSampleModals();
   await loadSettingsData();
   renderTree();
   renderDetail();

@@ -96,7 +96,7 @@
                 <i class="bi bi-search"></i>
               </div>
               <div id="equipmentTree" class="equipment-tree"></div>
-              <button class="btn btn-primary w-100 add-equipment" type="button">
+              <button class="btn btn-primary w-100 add-equipment" id="openEquipmentAddModal" type="button">
                 <i class="bi bi-plus-lg"></i> 설비 추가
               </button>
             </aside>
@@ -193,7 +193,7 @@
               <article class="panel connected-meter-panel">
                 <div class="panel-header">
                   <h2>연결 계측기 (피더/하위 계측기)</h2>
-                  <button class="btn btn-outline-primary btn-sm" type="button">
+                  <button class="btn btn-outline-primary btn-sm" id="openConnectedMeterModal" type="button">
                     <i class="bi bi-plus-lg"></i> 연결 계측기 추가
                   </button>
                 </div>
@@ -219,6 +219,58 @@
             </section>
           </section>
         </main>
+      </div>
+    </div>
+
+    <div id="equipmentAddModal" class="settings-modal" aria-hidden="true">
+      <div class="settings-modal-card" role="dialog" aria-modal="true" aria-labelledby="equipmentAddTitle">
+        <div class="settings-modal-header">
+          <h2 id="equipmentAddTitle">설비 추가</h2>
+          <button class="icon-button modal-close" type="button" data-close-modal="equipmentAddModal" aria-label="닫기">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <form class="settings-modal-form" id="equipmentAddForm">
+          <label>설비 ID<input class="form-control" id="newEquipmentId" type="text" value="EQ-306" required></label>
+          <label>설비명<input class="form-control" id="newEquipmentName" type="text" value="3공장 압출라인 1 보조압축기" required></label>
+          <label>설치 공장<select class="form-select" id="newEquipmentFactory"><option>3공장</option><option>4공장</option><option>5공장</option></select></label>
+          <label>공정<select class="form-select" id="newEquipmentProcess"><option>압출 공정</option><option>열처리 공정</option><option>성형 공정</option></select></label>
+          <label>라인/피더<input class="form-control" id="newEquipmentLine" type="text" value="압출 라인 1"></label>
+          <label>설비 구분<select class="form-select" id="newEquipmentType"><option>전력 계측 대상</option><option>생산 설비</option><option>보조 설비</option></select></label>
+          <label>설치 위치<input class="form-control" id="newEquipmentLocation" type="text" value="3공장 1층 배전반"></label>
+          <label>설치일<input class="form-control" id="newEquipmentDate" type="date" value="2025-05-20"></label>
+          <label class="wide">메모<textarea class="form-control" id="newEquipmentMemo" rows="2">추후 RTU 연결 후 전력 원단위 산정 대상에 포함</textarea></label>
+          <div class="modal-actions">
+            <button class="btn btn-outline-secondary" type="button" data-close-modal="equipmentAddModal">취소</button>
+            <button class="btn btn-primary" type="submit">샘플 저장</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="connectedMeterModal" class="settings-modal" aria-hidden="true">
+      <div class="settings-modal-card" role="dialog" aria-modal="true" aria-labelledby="connectedMeterTitle">
+        <div class="settings-modal-header">
+          <h2 id="connectedMeterTitle">연결 계측기 추가</h2>
+          <button class="icon-button modal-close" type="button" data-close-modal="connectedMeterModal" aria-label="닫기">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <form class="settings-modal-form" id="connectedMeterForm">
+          <label>계측기 ID<input class="form-control" id="newMeterId" type="text" value="RTU-304" required></label>
+          <label>계측기명<input class="form-control" id="newMeterName" type="text" value="3공장 압출1라인 피더3" required></label>
+          <label>타입<select class="form-select" id="newMeterType"><option>RTU</option></select></label>
+          <label>연결 방식<select class="form-select" id="newMeterConnection"><option>Modbus TCP</option><option>Modbus RTU</option></select></label>
+          <label>IP 주소<input class="form-control" id="newMeterIp" type="text" value="192.168.1.304" required></label>
+          <label>포트<input class="form-control" id="newMeterPort" type="number" value="502"></label>
+          <label>역할<select class="form-select" id="newMeterRole"><option>피더</option><option>하위 계측기</option><option>메인</option></select></label>
+          <label>상태<select class="form-select" id="newMeterStatus"><option>정상</option><option>점검</option><option>통신이상</option></select></label>
+          <label class="wide">메모<textarea class="form-control" id="newMeterMemo" rows="2">메인 계측기 RTU-301 하위 피더로 연결 예정</textarea></label>
+          <div class="modal-actions">
+            <button class="btn btn-outline-secondary" type="button" data-close-modal="connectedMeterModal">취소</button>
+            <button class="btn btn-primary" type="submit">샘플 저장</button>
+          </div>
+        </form>
       </div>
     </div>
 

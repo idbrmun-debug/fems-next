@@ -5,6 +5,7 @@ const state = {
   rows: [],
   filteredRows: [],
   charts: [],
+  editingRow: null,
 };
 
 const currencyFormatter = new Intl.NumberFormat("ko-KR", {
@@ -181,7 +182,24 @@ function renderCharts() {
   state.charts.push(downtimeChart, ratioChart);
 }
 
-function openModal() {
+function openModal(mode = "create", row = null) {
+  state.editingRow = mode === "edit" ? row : null;
+  const title = document.getElementById("modalTitle");
+  const saveButton = document.querySelector("#maintenanceForm button[type='submit']");
+  if (title) {
+    title.textContent = mode === "edit" ? "유지보수 이력 편집" : "유지보수 이력 등록";
+  }
+  if (saveButton) {
+    saveButton.textContent = mode === "edit" ? "수정 저장" : "저장";
+  }
+
+  if (row) {
+    setModalValues(row);
+  } else {
+    document.getElementById("maintenanceForm").reset();
+    setDefaultFormValues();
+  }
+
   document.getElementById("maintenanceModal").classList.add("show");
   document.getElementById("maintenanceModal").setAttribute("aria-hidden", "false");
 }
@@ -189,6 +207,21 @@ function openModal() {
 function closeModal() {
   document.getElementById("maintenanceModal").classList.remove("show");
   document.getElementById("maintenanceModal").setAttribute("aria-hidden", "true");
+  state.editingRow = null;
+}
+
+function setModalValues(row) {
+  document.getElementById("workDate").value = row.date || "";
+  document.getElementById("modalFactory").value = row.factory || "";
+  document.getElementById("modalProcess").value = row.process || "";
+  document.getElementById("modalEquipment").value = row.equipment || "";
+  document.getElementById("modalWorkType").value = row.work_type || "";
+  document.getElementById("modalOwner").value = row.owner || "";
+  document.getElementById("modalDowntime").value = Number(row.downtime || 0);
+  document.getElementById("modalCost").value = Number(row.cost || 0);
+  document.getElementById("modalWork").value = row.work || "";
+  document.getElementById("modalAction").value = row.action || "점검 결과를 반영해 이력 내용을 수정합니다.";
+  document.getElementById("modalNote").value = row.note || "샘플 편집 화면입니다.";
 }
 
 function showToast() {
@@ -209,13 +242,24 @@ function bindEvents() {
     renderRows();
   });
 
-  document.getElementById("openModal").addEventListener("click", openModal);
+  document.getElementById("openModal").addEventListener("click", () => openModal("create"));
   document.getElementById("closeModal").addEventListener("click", closeModal);
   document.getElementById("cancelModal").addEventListener("click", closeModal);
 
   document.getElementById("maintenanceModal").addEventListener("click", (event) => {
     if (event.target.id === "maintenanceModal") {
       closeModal();
+    }
+  });
+
+  document.getElementById("maintenanceRows").addEventListener("click", (event) => {
+    const editButton = event.target.closest(".btn-outline-primary[data-index]");
+    if (!editButton) {
+      return;
+    }
+    const row = state.filteredRows[Number(editButton.dataset.index)];
+    if (row) {
+      openModal("edit", row);
     }
   });
 
@@ -242,7 +286,11 @@ function bindEvents() {
       body: JSON.stringify(row),
     });
 
-    state.rows.unshift(row);
+    if (state.editingRow) {
+      Object.assign(state.editingRow, row);
+    } else {
+      state.rows.unshift(row);
+    }
     state.filteredRows = [...state.rows];
     renderRows();
     closeModal();
