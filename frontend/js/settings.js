@@ -153,10 +153,25 @@ function renderConnectedMeters() {
 }
 
 function bindTabs() {
+  const breadcrumbs = {
+    equipment: "설정 > 공장/설비 관리",
+    meter: "설정 > 계측기 관리",
+    alarm: "설정 > 알람 설정",
+    target: "설정 > 목표 관리",
+    system: "설정 > 시스템 관리",
+  };
+
   document.querySelectorAll(".settings-tab").forEach((button) => {
     button.addEventListener("click", () => {
       document.querySelectorAll(".settings-tab").forEach((item) => item.classList.remove("active"));
       button.classList.add("active");
+      document.querySelectorAll("[data-tab-panel]").forEach((panel) => {
+        panel.classList.toggle("active", panel.dataset.tabPanel === button.dataset.tab);
+      });
+      const breadcrumb = document.querySelector(".breadcrumb-text");
+      if (breadcrumb) {
+        breadcrumb.textContent = breadcrumbs[button.dataset.tab] || "설정";
+      }
     });
   });
 }
@@ -201,6 +216,10 @@ function bindSampleModals() {
 
   document.getElementById("openConnectedMeterModal")?.addEventListener("click", () => {
     openSettingsModal("connectedMeterModal");
+  });
+
+  document.querySelectorAll(".open-connected-meter-modal").forEach((button) => {
+    button.addEventListener("click", () => openSettingsModal("connectedMeterModal"));
   });
 
   document.querySelectorAll("[data-close-modal]").forEach((button) => {

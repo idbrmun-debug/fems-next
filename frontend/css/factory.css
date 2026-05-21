@@ -47,6 +47,38 @@
   color: var(--fems-blue);
 }
 
+.static-scope-panel {
+  border-style: dashed;
+  background: linear-gradient(180deg, #fbfdff 0%, #ffffff 100%);
+}
+
+.static-scope-panel .panel-header {
+  background: #f8fafc;
+}
+
+.scope-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 11px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.scope-badge.static {
+  border: 1px solid #cbd5e1;
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.scope-badge.static::before {
+  content: "고정";
+  color: #64748b;
+  font-size: 10px;
+}
+
 .factory-summary-grid {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));

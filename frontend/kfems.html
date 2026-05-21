@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FEMS k-FEMS 연동</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="./dashboard-main.css" rel="stylesheet">
+    <link href="./css/kfems.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="dashboard-shell">
+      <aside class="sidebar" aria-label="FEMS navigation">
+        <div class="sidebar-brand">
+          <i class="bi bi-lightning-charge-fill"></i>
+        </div>
+        <nav class="sidebar-nav"></nav>
+      </aside>
+
+      <div class="main-area">
+        <header class="topbar"></header>
+
+        <main class="content kfems-content">
+          <section class="kfems-title-row">
+            <div>
+              <h2>k-FEMS 연동</h2>
+              <span>향후 k-FEMS 데이터 송수신, 표준 코드 매핑, 전송 이력 관리를 위한 준비 화면입니다.</span>
+            </div>
+            <nav class="breadcrumb-text" aria-label="breadcrumb">k-FEMS &gt; 연동 준비</nav>
+          </section>
+
+          <section class="kfems-summary-grid">
+            <article class="kfems-kpi-card">
+              <i class="bi bi-cloud-check"></i>
+              <span>연동 상태</span>
+              <strong>준비중</strong>
+            </article>
+            <article class="kfems-kpi-card">
+              <i class="bi bi-database-check"></i>
+              <span>대상 bucket</span>
+              <strong>gems_test</strong>
+            </article>
+            <article class="kfems-kpi-card">
+              <i class="bi bi-clock-history"></i>
+              <span>전송 주기</span>
+              <strong>미설정</strong>
+            </article>
+            <article class="kfems-kpi-card">
+              <i class="bi bi-shield-check"></i>
+              <span>인증 방식</span>
+              <strong>API Key</strong>
+            </article>
+          </section>
+
+          <section class="kfems-grid">
+            <article class="panel">
+              <div class="panel-header">
+                <h2>연동 기본 설정</h2>
+                <button class="btn btn-primary btn-sm" type="button" id="saveKfemsConfig">
+                  <i class="bi bi-save"></i> 저장
+                </button>
+              </div>
+              <form class="kfems-form">
+                <label>k-FEMS API URL<input class="form-control" type="text" value="https://kfems.example/api/v1/energy" disabled></label>
+                <label>사업장 코드<input class="form-control" type="text" value="PLANT-YSQ-001"></label>
+                <label>전송 주기<select class="form-select"><option>수동</option><option>5분</option><option>15분</option><option>1시간</option></select></label>
+                <label>인증 방식<select class="form-select"><option>API Key</option><option>OAuth2</option></select></label>
+                <label class="wide">전송 대상 measurement<input class="form-control" type="text" value="gems_power, production_input, maintenance_log"></label>
+                <label class="wide">API Key<input class="form-control" type="password" value="sample-key-placeholder"></label>
+              </form>
+            </article>
+
+            <article class="panel">
+              <div class="panel-header">
+                <h2>전송 데이터 매핑</h2>
+                <span>샘플 기준</span>
+              </div>
+              <div class="table-responsive">
+                <table class="table dashboard-table align-middle">
+                  <thead>
+                    <tr><th>FEMS 항목</th><th>InfluxDB 필드/태그</th><th>k-FEMS 항목</th><th>상태</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>공장</td><td>factory</td><td>plantCode</td><td><span class="status-badge">매핑 완료</span></td></tr>
+                    <tr><td>공정</td><td>process</td><td>processCode</td><td><span class="status-badge">매핑 완료</span></td></tr>
+                    <tr><td>전력량</td><td>sum_kwh</td><td>energyUsageKwh</td><td><span class="status-badge">매핑 완료</span></td></tr>
+                    <tr><td>생산량</td><td>production_input.production_ton</td><td>productionTon</td><td><span class="status-badge pending">검토 필요</span></td></tr>
+                    <tr><td>원단위</td><td>sum_kwh / production_ton</td><td>specificEnergy</td><td><span class="status-badge pending">검토 필요</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+          </section>
+
+          <section class="kfems-grid">
+            <article class="panel">
+              <div class="panel-header">
+                <h2>전송 이력</h2>
+                <button class="btn btn-outline-primary btn-sm" type="button" id="sendSamplePayload">
+                  <i class="bi bi-send"></i> 샘플 전송
+                </button>
+              </div>
+              <div class="table-responsive">
+                <table class="table dashboard-table align-middle">
+                  <thead>
+                    <tr><th>일시</th><th>구분</th><th>대상</th><th>건수</th><th>결과</th><th>메시지</th></tr>
+                  </thead>
+                  <tbody id="kfemsHistoryBody"></tbody>
+                </table>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-header">
+                <h2>연동 점검 항목</h2>
+                <span>운영 전 확인</span>
+              </div>
+              <div class="kfems-check-list">
+                <div><span>k-FEMS API 명세 확보</span><strong class="text-warning">대기</strong></div>
+                <div><span>사업장/공장/공정 코드 매핑</span><strong class="text-warning">검토</strong></div>
+                <div><span>전송 실패 재처리 정책</span><strong class="text-secondary">미정</strong></div>
+                <div><span>인증 키 보관 방식</span><strong class="text-secondary">미정</strong></div>
+                <div><span>전송 로그 저장 measurement</span><strong>kfems_transfer_log</strong></div>
+              </div>
+            </article>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div id="kfemsToast" class="toast align-items-center text-bg-primary border-0" role="status" aria-live="polite" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">k-FEMS 샘플 동작이 실행되었습니다.</div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="닫기"></button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/common-layout.js"></script>
+    <script src="./js/kfems.js"></script>
+  </body>
+</html>

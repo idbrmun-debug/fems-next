@@ -83,10 +83,10 @@
             <button class="settings-tab" type="button" data-tab="meter">계측기 관리</button>
             <button class="settings-tab" type="button" data-tab="alarm">알람 설정</button>
             <button class="settings-tab" type="button" data-tab="target">목표 관리</button>
-            <button class="settings-tab" type="button" data-tab="system">시스템 설정</button>
+            <button class="settings-tab" type="button" data-tab="system">시스템 관리</button>
           </section>
 
-          <section class="settings-layout">
+          <section class="settings-layout settings-tab-panel active" data-tab-panel="equipment">
             <aside class="panel equipment-tree-panel">
               <div class="panel-header">
                 <h2>설비 구조</h2>
@@ -214,6 +214,183 @@
                     </thead>
                     <tbody id="connectedMeterRows"></tbody>
                   </table>
+                </div>
+              </article>
+            </section>
+          </section>
+
+          <section class="settings-tab-panel" data-tab-panel="meter">
+            <section class="settings-summary-grid">
+              <article class="settings-kpi-card"><i class="bi bi-cpu-fill"></i><span>전체 계측기</span><strong>72대</strong></article>
+              <article class="settings-kpi-card green"><i class="bi bi-wifi"></i><span>통신 정상</span><strong>68대</strong></article>
+              <article class="settings-kpi-card amber"><i class="bi bi-exclamation-circle"></i><span>점검 필요</span><strong>3대</strong></article>
+              <article class="settings-kpi-card red"><i class="bi bi-x-octagon"></i><span>통신 이상</span><strong>1대</strong></article>
+            </section>
+
+            <section class="settings-two-column">
+              <article class="panel">
+                <div class="panel-header">
+                  <h2>계측기 등록/통신 설정</h2>
+                  <button class="btn btn-primary btn-sm open-connected-meter-modal" type="button"><i class="bi bi-plus-lg"></i> 계측기 추가</button>
+                </div>
+                <form class="settings-form-grid">
+                  <label>계측기 ID<input class="form-control" type="text" value="RTU-401"></label>
+                  <label>계측기명<input class="form-control" type="text" value="4공장 열처리 전기로 11"></label>
+                  <label>설치 공장<select class="form-select"><option>4공장</option><option>3공장</option><option>5공장</option></select></label>
+                  <label>공정<select class="form-select"><option>열처리 공정</option><option>압출 공정</option><option>성형 공정</option></select></label>
+                  <label>계측기 타입<select class="form-select"><option>RTU</option></select></label>
+                  <label>통신 방식<select class="form-select"><option>Modbus TCP</option><option>Modbus RTU</option></select></label>
+                  <label>IP 주소<input class="form-control" type="text" value="192.168.1.104"></label>
+                  <label>포트<input class="form-control" type="number" value="502"></label>
+                  <label>수집 주기<select class="form-select"><option>5초</option><option>10초</option><option>30초</option></select></label>
+                  <label>Influx measurement<input class="form-control" type="text" value="gems_power"></label>
+                  <label class="wide">tag 매핑<input class="form-control" type="text" value="factory=4공장, process=열처리 공정, meter=RTU-401, feeder=F-401, furnace=전기로 11"></label>
+                </form>
+                <div class="panel-actions">
+                  <button class="btn btn-outline-primary btn-sm" type="button"><i class="bi bi-activity"></i> 통신 테스트</button>
+                  <button class="btn btn-primary btn-sm save-settings" type="button">저장</button>
+                </div>
+              </article>
+
+              <article class="panel">
+                <div class="panel-header">
+                  <h2>계측기 상태 요약</h2>
+                  <span>최근 수집 기준</span>
+                </div>
+                <div class="meter-health-list">
+                  <div><span>RTU-301</span><strong class="text-success">정상</strong><small>3공장 압출라인 1 / 5초 전</small></div>
+                  <div><span>RTU-401</span><strong class="text-success">정상</strong><small>4공장 전기로 11 / 4초 전</small></div>
+                  <div><span>RTU-503</span><strong class="text-warning">지연</strong><small>5공장 성형라인 / 48초 전</small></div>
+                  <div><span>RTU-512</span><strong class="text-danger">통신이상</strong><small>5공장 보조피더 / 12분 전</small></div>
+                </div>
+              </article>
+            </section>
+
+            <article class="panel">
+              <div class="panel-header">
+                <h2>계측기 목록</h2>
+                <span>RTU 기준</span>
+              </div>
+              <div class="table-responsive">
+                <table class="table dashboard-table align-middle">
+                  <thead><tr><th>ID</th><th>계측기명</th><th>공장</th><th>공정</th><th>IP</th><th>포트</th><th>수집 주기</th><th>상태</th><th>관리</th></tr></thead>
+                  <tbody>
+                    <tr><td>RTU-301</td><td>3공장 압출1라인 메인</td><td>3공장</td><td>압출 공정</td><td>192.168.1.301</td><td>502</td><td>5초</td><td><span class="status-badge">정상</span></td><td><button class="btn btn-outline-primary btn-sm">수정</button></td></tr>
+                    <tr><td>RTU-401</td><td>4공장 전기로 11</td><td>4공장</td><td>열처리 공정</td><td>192.168.1.104</td><td>502</td><td>5초</td><td><span class="status-badge">정상</span></td><td><button class="btn btn-outline-primary btn-sm">수정</button></td></tr>
+                    <tr><td>RTU-512</td><td>5공장 보조피더</td><td>5공장</td><td>성형 공정</td><td>192.168.1.512</td><td>502</td><td>10초</td><td><span class="status-badge danger">통신이상</span></td><td><button class="btn btn-outline-primary btn-sm">수정</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+          </section>
+
+          <section class="settings-tab-panel" data-tab-panel="alarm">
+            <section class="settings-two-column">
+              <article class="panel">
+                <div class="panel-header">
+                  <h2>알람 임계값 설정</h2>
+                  <button class="btn btn-outline-primary btn-sm" type="button"><i class="bi bi-plus-lg"></i> 항목 추가</button>
+                </div>
+                <div class="table-responsive">
+                  <table class="table dashboard-table align-middle">
+                    <thead><tr><th>항목</th><th>하한</th><th>상한</th><th>단위</th><th>지속시간</th><th>레벨</th><th>사용</th></tr></thead>
+                    <tbody>
+                      <tr><td>전압</td><td>340</td><td>380</td><td>V</td><td>5초</td><td><span class="alarm-level warning">경고</span></td><td><label class="toggle-switch"><input type="checkbox" checked><span></span></label></td></tr>
+                      <tr><td>전류</td><td>-</td><td>800</td><td>A</td><td>5초</td><td><span class="alarm-level warning">경고</span></td><td><label class="toggle-switch"><input type="checkbox" checked><span></span></label></td></tr>
+                      <tr><td>역률</td><td>0.80</td><td>-</td><td>-</td><td>10초</td><td><span class="alarm-level warning">경고</span></td><td><label class="toggle-switch"><input type="checkbox" checked><span></span></label></td></tr>
+                      <tr><td>통신 상태</td><td>-</td><td>-</td><td>-</td><td>30초</td><td><span class="alarm-level stop">정지</span></td><td><label class="toggle-switch"><input type="checkbox" checked><span></span></label></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+
+              <article class="panel">
+                <div class="panel-header">
+                  <h2>알림 정책</h2>
+                  <span>화면/보고서 연동 기준</span>
+                </div>
+                <form class="settings-form-grid compact">
+                  <label>경고 알람 표시<select class="form-select"><option>대시보드 + 알람 화면</option></select></label>
+                  <label>정지 알람 표시<select class="form-select"><option>상단 상태바 + 알람 화면</option></select></label>
+                  <label>미확인 유지시간<input class="form-control" type="text" value="24시간"></label>
+                  <label>최근 알람 건수<input class="form-control" type="number" value="10"></label>
+                  <label class="wide">조치 가이드<textarea class="form-control" rows="3">전압/전류 이상 발생 시 해당 RTU 통신 상태, 설비 부하, 최근 유지보수 이력을 순서대로 확인합니다.</textarea></label>
+                </form>
+              </article>
+            </section>
+          </section>
+
+          <section class="settings-tab-panel" data-tab-panel="target">
+            <section class="settings-two-column">
+              <article class="panel">
+                <div class="panel-header">
+                  <h2>목표 원단위/생산량 관리</h2>
+                  <button class="btn btn-primary btn-sm save-settings" type="button">저장</button>
+                </div>
+                <div class="table-responsive">
+                  <table class="table dashboard-table align-middle">
+                    <thead><tr><th>공장</th><th>공정</th><th>목표 원단위</th><th>목표 생산량</th><th>목표 전력량</th><th>적용 기간</th><th>사용</th></tr></thead>
+                    <tbody>
+                      <tr><td>3공장</td><td>압출 공정</td><td><input class="form-control form-control-sm" value="20.50"></td><td><input class="form-control form-control-sm" value="3,700"></td><td><input class="form-control form-control-sm" value="245,000"></td><td>2025-01-01 ~ 2025-12-31</td><td><label class="toggle-switch"><input type="checkbox" checked><span></span></label></td></tr>
+                      <tr><td>4공장</td><td>열처리 공정</td><td><input class="form-control form-control-sm" value="20.00"></td><td><input class="form-control form-control-sm" value="3,800"></td><td><input class="form-control form-control-sm" value="268,000"></td><td>2025-01-01 ~ 2025-12-31</td><td><label class="toggle-switch"><input type="checkbox" checked><span></span></label></td></tr>
+                      <tr><td>5공장</td><td>성형 공정</td><td><input class="form-control form-control-sm" value="22.00"></td><td><input class="form-control form-control-sm" value="3,500"></td><td><input class="form-control form-control-sm" value="216,000"></td><td>2025-01-01 ~ 2025-12-31</td><td><label class="toggle-switch"><input type="checkbox" checked><span></span></label></td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+
+              <article class="panel">
+                <div class="panel-header">
+                  <h2>목표 변경 이력</h2>
+                  <span>감사 추적용</span>
+                </div>
+                <div class="target-history-list">
+                  <div><strong>2025-01-01</strong><span>3공장 압출 공정 목표 원단위 20.50 등록</span><small>admin</small></div>
+                  <div><strong>2025-01-01</strong><span>4공장 열처리 공정 목표 원단위 20.00 등록</span><small>admin</small></div>
+                  <div><strong>2025-01-01</strong><span>5공장 성형 공정 목표 원단위 22.00 등록</span><small>admin</small></div>
+                </div>
+              </article>
+            </section>
+          </section>
+
+          <section class="settings-tab-panel" data-tab-panel="system">
+            <section class="settings-summary-grid">
+              <article class="settings-kpi-card green"><i class="bi bi-hdd-network"></i><span>Backend API</span><strong>5000</strong></article>
+              <article class="settings-kpi-card"><i class="bi bi-database"></i><span>InfluxDB</span><strong>8086</strong></article>
+              <article class="settings-kpi-card amber"><i class="bi bi-bar-chart"></i><span>Grafana</span><strong>3000</strong></article>
+              <article class="settings-kpi-card purple"><i class="bi bi-arrow-repeat"></i><span>수집 주기</span><strong>5초</strong></article>
+            </section>
+
+            <section class="settings-two-column">
+              <article class="panel">
+                <div class="panel-header">
+                  <h2>Docker/TIG 시스템 설정</h2>
+                  <span>docker-compose 기준</span>
+                </div>
+                <form class="settings-form-grid">
+                  <label>InfluxDB URL<input class="form-control" value="http://influxdb:8086"></label>
+                  <label>InfluxDB org<input class="form-control" value="fems"></label>
+                  <label>bucket<input class="form-control" value="gems_test"></label>
+                  <label>measurement<input class="form-control" value="gems_power"></label>
+                  <label>Grafana URL<input class="form-control" value="http://grafana:3000"></label>
+                  <label>Backend API<input class="form-control" value="http://backend:5000"></label>
+                  <label>Telegraf config<input class="form-control" value="/etc/telegraf/telegraf.conf"></label>
+                  <label>restart policy<input class="form-control" value="unless-stopped"></label>
+                  <label class="wide">운영 메모<textarea class="form-control" rows="3">Windows 10 Pro + Docker Desktop 환경에서 D:\fems-next 기준으로 실행합니다. 기존 D:\FEMS 운영 프로젝트와 포트 충돌 여부를 확인합니다.</textarea></label>
+                </form>
+              </article>
+
+              <article class="panel">
+                <div class="panel-header">
+                  <h2>운영 관리</h2>
+                  <button class="btn btn-outline-primary btn-sm" type="button"><i class="bi bi-download"></i> 설정 백업</button>
+                </div>
+                <div class="system-check-list">
+                  <div><span>Docker Desktop</span><strong class="text-success">실행 중</strong></div>
+                  <div><span>InfluxDB bucket</span><strong>gems_test</strong></div>
+                  <div><span>Grafana provisioning</span><strong class="text-success">활성</strong></div>
+                  <div><span>Telegraf input</span><strong>Modbus TCP 템플릿</strong></div>
+                  <div><span>최근 백업</span><strong>2026-05-21 09:00</strong></div>
                 </div>
               </article>
             </section>

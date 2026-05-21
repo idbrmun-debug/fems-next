@@ -6,6 +6,7 @@ const FEMS_NAV_ITEMS = [
   { section: "report", label: "리포트", href: "./report.html", icon: "bi-bar-chart-line-fill", match: ["report.html"] },
   { section: "production", label: "생산량 입력", href: "./production-input.html", icon: "bi-pencil-square", match: ["production-input.html"] },
   { section: "maintenance", label: "유지보수 이력", href: "./maintenance.html", icon: "bi-clipboard2-pulse-fill", match: ["maintenance.html"] },
+  { section: "kfems", label: "k-FEMS", href: "./kfems.html", icon: "bi-diagram-3-fill", match: ["kfems.html"] },
   { section: "settings", label: "설정", href: "./settings.html", icon: "bi-gear-fill", match: ["settings.html"] },
 ];
 

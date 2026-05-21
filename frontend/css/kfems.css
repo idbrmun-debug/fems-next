@@ -1,0 +1,145 @@
+.kfems-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.kfems-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.kfems-title-row h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.kfems-title-row span,
+.kfems-title-row nav {
+  color: var(--fems-muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.kfems-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.kfems-kpi-card {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  align-items: center;
+  gap: 12px;
+  min-height: 90px;
+  border: 1px solid var(--fems-line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 14px;
+}
+
+.kfems-kpi-card i {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border-radius: 50%;
+  background: #eef5ff;
+  color: var(--fems-blue);
+  font-size: 22px;
+}
+
+.kfems-kpi-card span {
+  display: block;
+  color: var(--fems-muted);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.kfems-kpi-card strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.kfems-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr);
+  gap: 10px;
+}
+
+.kfems-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 4px 14px 14px;
+}
+
+.kfems-form label {
+  color: #465469;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.kfems-form input,
+.kfems-form select {
+  margin-top: 5px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.kfems-form .wide {
+  grid-column: 1 / -1;
+}
+
+.status-badge.pending {
+  border-color: #ffc46b;
+  background: #fff8e7;
+  color: #f08a00;
+}
+
+.kfems-check-list {
+  display: grid;
+  gap: 10px;
+  padding: 0 14px 14px;
+}
+
+.kfems-check-list div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  background: #fbfdff;
+  padding: 10px;
+}
+
+.kfems-check-list span,
+.kfems-check-list strong {
+  font-size: 13px;
+  font-weight: 900;
+}
+
+@media (max-width: 1500px) {
+  .kfems-grid,
+  .kfems-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .kfems-title-row,
+  .kfems-form {
+    grid-template-columns: 1fr;
+  }
+
+  .kfems-title-row {
+    flex-direction: column;
+  }
+}

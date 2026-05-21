@@ -1,5 +1,61 @@
 # Codex Worklog
 
+## 2026-05-21 최근 업데이트
+
+### 작업 일시
+
+- 2026-05-20 ~ 2026-05-21
+
+### 요청 내용 요약
+
+- 메인 화면의 `전력량 추이`와 `원단위 추이`에서 `1시간 / 일간 / 월간` 샘플 화면 표시
+- 설정 화면의 `+ 설비 추가` 및 `연결 계측기 추가` 샘플 화면 작성
+- 유지보수 화면 하단 관리 메뉴의 편집 버튼 클릭 시 편집 화면 샘플 작성
+- 메인 화면 `원단위 추이` 그래프의 x축 라벨을 선택 기간과 일치하도록 수정
+- 메인 화면에서 `공장별 종합 현황`과 `전체 요약`의 위치 변경
+- 위 작업 내용을 `docs/codex-worklog.md`에 업데이트
+
+### 변경 파일
+
+- `frontend/dashboard-main.html`
+- `frontend/dashboard-main.css`
+- `frontend/dashboard-main.js`
+- `frontend/settings.html`
+- `frontend/css/settings.css`
+- `frontend/js/settings.js`
+- `frontend/js/maintenance.js`
+- `docs/screenshots/dashboard-trend-hour.png`
+- `docs/screenshots/dashboard-trend-day.png`
+- `docs/screenshots/dashboard-trend-month.png`
+- `docs/screenshots/settings-equipment-add.png`
+- `docs/screenshots/settings-connected-meter-add.png`
+- `docs/screenshots/maintenance-edit-modal.png`
+- `docs/codex-worklog.md`
+
+### 구현 기능
+
+- 메인 화면 차트 기간 버튼에 `data-chart` 구분값 추가
+- `전력량 추이`와 `원단위 추이` 차트의 `1시간 / 일간 / 월간` 샘플 데이터 전환 기능 추가
+- `원단위 추이` 그래프의 x축 라벨을 `selectedSpecificTrend.labels` 기준으로 변경
+- `1시간` 선택 시 시간대 라벨, `일간` 선택 시 일자 라벨, `월간` 선택 시 월 라벨이 표시되도록 수정
+- 설정 화면에 `설비 추가` modal 추가
+- 설정 화면에 `연결 계측기 추가` modal 추가
+- 설정 modal 저장 시 더미 데이터 기준으로 화면에 샘플 행/노드가 추가되도록 처리
+- 유지보수 이력 테이블의 편집 버튼 클릭 시 기존 행 데이터가 입력된 편집 modal 표시
+- 유지보수 편집 저장 시 해당 행 데이터가 프론트엔드 상태에서 갱신되도록 처리
+- 메인 상단 레이아웃을 `전체 요약` 왼쪽, `공장별 종합 현황` 오른쪽으로 변경
+- 상단 그리드 비율을 `전체 요약 1fr / 공장별 종합 현황 2fr`로 조정
+
+### 검증 결과
+
+- `frontend/dashboard-main.js`, `frontend/js/settings.js`, `frontend/js/maintenance.js` 문법 검사 통과
+- 브라우저에서 메인 차트 기간 버튼 동작 확인
+- 브라우저에서 설정 `설비 추가` modal 표시 확인
+- 브라우저에서 설정 `연결 계측기 추가` modal 표시 확인
+- 브라우저에서 유지보수 이력 편집 modal 표시 및 기존 데이터 채움 확인
+- 요청 화면별 샘플 스크린샷 생성 확인
+- `docker compose ps` 기준 backend, grafana, influxdb, telegraf 실행 상태 확인
+
 ## 기준 정보
 
 | 항목 | 내용 |

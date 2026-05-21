@@ -173,7 +173,7 @@ body {
 }
 
 .top-layout {
-  grid-template-columns: minmax(0, 2fr) minmax(360px, 1fr);
+  grid-template-columns: minmax(360px, 1fr) minmax(0, 2fr);
 }
 
 .chart-layout {
